@@ -1,6 +1,10 @@
 function index(req, res) {
   res.cookie('IndexCookie', 'This was set from Index');
-  res.send(JSON.stringify(req.cookies));
+  res.send(
+    `${JSON.stringify(req.cookies)}===${JSON.stringify(
+      req.session,
+    )}`,
+  );
 }
 function login(req, res) {
   res.send('Login');
