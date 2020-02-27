@@ -30,6 +30,7 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(csrf());
 app.use(util.csrf);
+app.use(util.authenticated);
 
 app.use((req, res, next) => {
   if (req.session.pageCount) req.session.pageCount += 1;
@@ -40,7 +41,8 @@ app.use((req, res, next) => {
 app.get('/', routes.index);
 app.get('/login', routes.login);
 app.post('/login', routes.loginProcess);
-app.get('/chat', routes.chat);
+app.get('/logout', routes.logOut);
+app.get('/chat', [util.requireAuthentication], routes.chat);
 app.get('/error', (req, res, next) => {
   next(new Error('A contrived error'));
 });
