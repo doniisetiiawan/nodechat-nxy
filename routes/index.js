@@ -10,7 +10,8 @@ function login(req, res) {
   res.send('Login');
 }
 function loginProcess(req, res) {
-  res.redirect('/');
+  console.log(req.body);
+  res.send(`${req.body.username} ${req.body.password}`);
 }
 function chat(req, res) {
   res.send('Chat');

@@ -3,6 +3,7 @@ const cookieParser = require('cookie-parser');
 const session = require('express-session');
 const RedisStore = require('connect-redis')(session);
 const redis = require('redis');
+const bodyParser = require('body-parser');
 const routes = require('./routes');
 const errorHandlers = require('./middleware/errorhandlers');
 const log = require('./middleware/log');
@@ -23,6 +24,8 @@ app.use(
     store: new RedisStore({ client: redisClient }),
   }),
 );
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({extended: false}));
 
 app.use((req, res, next) => {
   if (req.session.pageCount) req.session.pageCount += 1;
