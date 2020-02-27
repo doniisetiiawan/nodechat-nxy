@@ -14,7 +14,6 @@ const config = require('./config');
 const redisClient = redis.createClient();
 
 const app = express();
-const port = config.port;
 
 app.use(log.logger);
 app.use(express.static(`${__dirname}/static`));
@@ -52,4 +51,4 @@ app.get('/error', (req, res, next) => {
 app.use(errorHandlers.error);
 app.use(errorHandlers.notFound);
 
-app.listen(port, () => console.log(`Example app listening on port ${port}!`));
+app.listen(config.port, () => console.log(`Example app listening on port ${config.port}!`));
