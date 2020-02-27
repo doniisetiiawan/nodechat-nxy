@@ -3,7 +3,9 @@ function index(req, res) {
   res.send(
     `${JSON.stringify(req.cookies)}===${JSON.stringify(
       req.session,
-    )}===${JSON.stringify(req.signedCookies)}`,
+    )}===${JSON.stringify(
+      req.signedCookies,
+    )}===${JSON.stringify(req.csrfToken())}`,
   );
 }
 function login(req, res) {

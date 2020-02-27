@@ -4,9 +4,11 @@ const session = require('express-session');
 const RedisStore = require('connect-redis')(session);
 const redis = require('redis');
 const bodyParser = require('body-parser');
+const csrf = require('csurf');
 const routes = require('./routes');
 const errorHandlers = require('./middleware/errorhandlers');
 const log = require('./middleware/log');
+const util = require('./middleware/utilities');
 
 const redisClient = redis.createClient();
 
@@ -25,7 +27,9 @@ app.use(
   }),
 );
 app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({extended: false}));
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use(csrf());
+app.use(util.csrf);
 
 app.use((req, res, next) => {
   if (req.session.pageCount) req.session.pageCount += 1;
