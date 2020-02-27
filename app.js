@@ -1,4 +1,5 @@
 const express = require('express');
+const cookieParser = require('cookie-parser');
 const routes = require('./routes');
 const errorHandlers = require('./middleware/errorhandlers');
 const log = require('./middleware/log');
@@ -8,6 +9,7 @@ const port = 3000;
 
 app.use(log.logger);
 app.use(express.static(`${__dirname}/static`));
+app.use(cookieParser());
 
 app.get('/', routes.index);
 app.get('/login', routes.login);

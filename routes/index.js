@@ -1,5 +1,6 @@
 function index(req, res) {
-  res.send('Index');
+  res.cookie('IndexCookie', 'This was set from Index');
+  res.send(JSON.stringify(req.cookies));
 }
 function login(req, res) {
   res.send('Login');
