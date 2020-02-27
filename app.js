@@ -1,21 +1,26 @@
 const express = require('express');
 const cookieParser = require('cookie-parser');
 const session = require('express-session');
+const RedisStore = require('connect-redis')(session);
+const redis = require('redis');
 const routes = require('./routes');
 const errorHandlers = require('./middleware/errorhandlers');
 const log = require('./middleware/log');
+
+const redisClient = redis.createClient();
 
 const app = express();
 const port = 3000;
 
 app.use(log.logger);
 app.use(express.static(`${__dirname}/static`));
-app.use(cookieParser());
+app.use(cookieParser('Intrinsicly'));
 app.use(
   session({
     secret: 'Intrinsicly',
-    resave: false,
     saveUninitialized: true,
+    resave: true,
+    store: new RedisStore({ client: redisClient }),
   }),
 );
 
