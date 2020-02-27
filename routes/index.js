@@ -1,4 +1,5 @@
 const util = require('../middleware/utilities');
+const config = require('../config');
 
 function index(req, res) {
   res.cookie('IndexCookie', 'This was set from Index');
@@ -22,7 +23,7 @@ function loginProcess(req, res) {
   if (isAuth) {
     res.redirect('/chat');
   } else {
-    res.redirect('/login');
+    res.redirect(config.routes.login);
   }
 }
 function logOut(req, res) {

@@ -9,18 +9,19 @@ const routes = require('./routes');
 const errorHandlers = require('./middleware/errorhandlers');
 const log = require('./middleware/log');
 const util = require('./middleware/utilities');
+const config = require('./config');
 
 const redisClient = redis.createClient();
 
 const app = express();
-const port = 3000;
+const port = config.port;
 
 app.use(log.logger);
 app.use(express.static(`${__dirname}/static`));
-app.use(cookieParser('Intrinsicly'));
+app.use(cookieParser(config.secret));
 app.use(
   session({
-    secret: 'Intrinsicly',
+    secret: config.secret,
     saveUninitialized: true,
     resave: true,
     store: new RedisStore({ client: redisClient }),
@@ -31,6 +32,7 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(csrf());
 app.use(util.csrf);
 app.use(util.authenticated);
+app.use(util.templateRoutes);
 
 app.use((req, res, next) => {
   if (req.session.pageCount) req.session.pageCount += 1;
@@ -39,9 +41,9 @@ app.use((req, res, next) => {
 });
 
 app.get('/', routes.index);
-app.get('/login', routes.login);
-app.post('/login', routes.loginProcess);
-app.get('/logout', routes.logOut);
+app.get(config.routes.login, routes.login);
+app.post(config.routes.login, routes.loginProcess);
+app.get(config.routes.logout, routes.logOut);
 app.get('/chat', [util.requireAuthentication], routes.chat);
 app.get('/error', (req, res, next) => {
   next(new Error('A contrived error'));
