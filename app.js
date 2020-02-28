@@ -10,6 +10,7 @@ const errorHandlers = require('./middleware/errorhandlers');
 const log = require('./middleware/log');
 const util = require('./middleware/utilities');
 const config = require('./config');
+const io = require('./socket.io');
 
 const redisClient = redis.createClient();
 
@@ -51,4 +52,7 @@ app.get('/error', (req, res, next) => {
 app.use(errorHandlers.error);
 app.use(errorHandlers.notFound);
 
-app.listen(config.port, () => console.log(`Example app listening on port ${config.port}!`));
+const server = app.listen(config.port, () => console.log(
+  `Example app listening on port ${config.port}!`,
+));
+io.startIo(server);
