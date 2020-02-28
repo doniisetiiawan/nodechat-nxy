@@ -39,8 +39,13 @@ const socketAuth = function socketAuth(socket, next) {
 };
 
 const socketConnection = function socketConnection(socket) {
-  socket.emit('message', { message: 'Hey!' });
-  socket.emit('message', socket.user);
+  socket.on('GetMe', () => {});
+  socket.on('GetUser', (room) => {});
+  socket.on('GetChat', (data) => {});
+  socket.on('AddChat', (chat) => {});
+  socket.on('GetRoom', () => {});
+  socket.on('AddRoom', (r) => {});
+  socket.on('disconnect', () => {});
 };
 
 exports.startIo = function startIo(server) {
