@@ -6,6 +6,7 @@ const ConnectRedis = require('connect-redis')(
   expressSession,
 );
 const redis = require('redis');
+const redisAdapter = require('socket.io-redis');
 
 const config = require('../config');
 
@@ -50,6 +51,13 @@ const socketConnection = function socketConnection(socket) {
 
 exports.startIo = function startIo(server) {
   io = io.listen(server);
+
+  io.adapter(
+    redisAdapter({
+      redisClient,
+    }),
+  );
+
   const packtchat = io.of('/packtchat');
 
   packtchat.use(socketAuth);
