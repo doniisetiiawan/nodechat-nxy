@@ -52,6 +52,8 @@ app.get('/error', (req, res, next) => {
   next(new Error('A contrived error'));
 });
 
+passport.routes(app);
+
 app.use(errorHandlers.error);
 app.use(errorHandlers.notFound);
 
