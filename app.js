@@ -11,6 +11,7 @@ const log = require('./middleware/log');
 const util = require('./middleware/utilities');
 const config = require('./config');
 const io = require('./socket.io');
+const passport = require('./passport');
 
 const redisClient = redis.createClient();
 
@@ -27,6 +28,8 @@ app.use(
     store: new RedisStore({ client: redisClient }),
   }),
 );
+app.use(passport.passport.initialize());
+app.use(passport.passport.session());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(csrf());
