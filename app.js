@@ -48,6 +48,8 @@ app.use((req, res, next) => {
 app.get('/', routes.index);
 app.get(config.routes.login, routes.login);
 app.get(config.routes.logout, routes.logOut);
+app.get(config.routes.register, routes.register);
+app.post(config.routes.register, routes.registerProcess);
 app.get('/chat', [util.requireAuthentication], routes.chat);
 app.get('/error', (req, res, next) => {
   next(new Error('A contrived error'));

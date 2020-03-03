@@ -10,9 +10,7 @@ module.exports.authenticated = function authenticated(
   res,
   next,
 ) {
-  if (req.session.isAuthenticated) {
-    req.session.isAuthenticated = req.session.passport.user;
-  }
+  req.session.isAuthenticated = req.session.passport.user !== undefined;
   res.locals.isAuthenticated = req.session.isAuthenticated;
   if (req.session.isAuthenticated) {
     res.locals.user = req.session.passport.user;
