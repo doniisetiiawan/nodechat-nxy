@@ -5,6 +5,7 @@ const RedisStore = require('connect-redis')(session);
 const redis = require('redis');
 const bodyParser = require('body-parser');
 const csrf = require('csurf');
+const flash = require('connect-flash');
 const routes = require('./routes');
 const errorHandlers = require('./middleware/errorhandlers');
 const log = require('./middleware/log');
@@ -35,6 +36,7 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(csrf());
 app.use(util.csrf);
 app.use(util.authenticated);
+app.use(flash());
 app.use(util.templateRoutes);
 
 app.use((req, res, next) => {

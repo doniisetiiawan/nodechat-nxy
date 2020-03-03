@@ -23,6 +23,7 @@ const config = {
     workFactor: 5000,
     keylen: 32,
     randomSize: 256,
+    digest: 'sha512',
   },
 };
 

@@ -15,6 +15,7 @@ const passwordCreate = function passwordCreate(
         salt.toString('base64'),
         config.crypto.workFactor,
         config.crypto.keylen,
+        config.crypto.digest,
         (err, key) => {
           cb(
             null,
@@ -39,11 +40,13 @@ const passwordCheck = function passwordCheck(
     salt,
     work,
     config.crypto.keylen,
+    config.crypto.digest,
     (err, key) => {
-      cb(
-        null,
-        scmp(key.toString('base64'), derivedPassword),
+      const derivedKey = Buffer.from(
+        key.toString('base64'),
       );
+      const derivedPass = Buffer.from(derivedPassword);
+      cb(null, scmp(derivedKey, derivedPass));
     },
   );
 };
