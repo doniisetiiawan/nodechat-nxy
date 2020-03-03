@@ -14,18 +14,6 @@ function index(req, res) {
 function login(req, res) {
   res.send('Login');
 }
-function loginProcess(req, res) {
-  const isAuth = util.auth(
-    req.body.username,
-    req.body.password,
-    req.session,
-  );
-  if (isAuth) {
-    res.redirect('/chat');
-  } else {
-    res.redirect(config.routes.login);
-  }
-}
 function logOut(req, res) {
   util.logOut(req);
   res.redirect('/');
@@ -36,6 +24,5 @@ function chat(req, res) {
 
 module.exports.index = index;
 module.exports.login = login;
-module.exports.loginProcess = loginProcess;
 module.exports.logOut = logOut;
 module.exports.chat = chat;

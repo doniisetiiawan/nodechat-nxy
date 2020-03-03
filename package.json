@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "main": "app.js",
   "scripts": {
-    "start": "nodemon --watch 'routes/**/*' --watch app.js"
+    "start": "nodemon --watch . --watch app.js"
   },
   "author": "Doni Setiawan <donisetiawan.050@gmail.com>",
   "license": "MIT",
@@ -25,7 +25,9 @@
     "passport": "^0.4.1",
     "passport-facebook": "^3.0.0",
     "passport-google-oauth": "^2.0.0",
+    "passport-local": "^1.0.0",
     "redis": "^3.0.2",
+    "scmp": "^2.1.0",
     "socket.io": "^2.3.0",
     "socket.io-redis": "^5.2.0"
   }

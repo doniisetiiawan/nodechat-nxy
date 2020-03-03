@@ -23,7 +23,7 @@ app.use(cookieParser(config.secret));
 app.use(
   session({
     secret: config.secret,
-    saveUninitialized: true,
+    saveUninitialized: false,
     resave: true,
     store: new RedisStore({ client: redisClient }),
   }),
@@ -45,7 +45,6 @@ app.use((req, res, next) => {
 
 app.get('/', routes.index);
 app.get(config.routes.login, routes.login);
-app.post(config.routes.login, routes.loginProcess);
 app.get(config.routes.logout, routes.logOut);
 app.get('/chat', [util.requireAuthentication], routes.chat);
 app.get('/error', (req, res, next) => {

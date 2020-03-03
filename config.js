@@ -1,6 +1,6 @@
 const config = {
   port: 3000,
-  secret: 'Progressively',
+  secret: 'Continually',
   routes: {
     login: '/account/login',
     logout: '/account/logout',
@@ -18,6 +18,11 @@ const config = {
   google: {
     clientID: 'YOUR_ID',
     clientSecret: 'YOUR_SECRET',
+  },
+  crypto: {
+    workFactor: 5000,
+    keylen: 32,
+    randomSize: 256,
   },
 };
 
