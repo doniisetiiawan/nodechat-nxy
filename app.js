@@ -49,7 +49,7 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(csrf());
 app.use(util.csrf);
-app.use(util.authenticated);
+// app.use(util.authenticated);
 app.use(flash());
 app.use(util.templateRoutes);
 
