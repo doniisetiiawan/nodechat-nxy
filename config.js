@@ -1,6 +1,8 @@
 const config = {
   port: 3000,
   secret: 'Continually',
+  redisPort: 6379,
+  redisHost: 'localhost',
   routes: {
     login: '/account/login',
     logout: '/account/logout',
@@ -28,4 +30,4 @@ const config = {
   },
 };
 
-module.exports = config;
+export default config;

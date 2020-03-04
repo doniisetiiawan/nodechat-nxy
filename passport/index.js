@@ -1,11 +1,10 @@
-const passport = require('passport');
-const Facebook = require('passport-facebook').Strategy;
-const GoogleStrategy = require('passport-google-oauth')
-  .OAuth2Strategy;
-const LocalStrategy = require('passport-local').Strategy;
-const passwordUtils = require('./password');
-const user = require('./user');
-const config = require('../config');
+import passport from 'passport';
+import { Strategy as Facebook } from 'passport-facebook';
+import { OAuth2Strategy as GoogleStrategy } from 'passport-google-oauth';
+import { Strategy as LocalStrategy } from 'passport-local';
+import passwordUtils from './password';
+import user from './user';
+import config from '../config';
 
 passport.use(
   new Facebook(
@@ -78,7 +77,7 @@ passport.deserializeUser((user, done) => {
   done(null, user);
 });
 
-const routes = function routes(app) {
+const routes = (app) => {
   app.get(
     config.routes.facebookAuth,
     passport.authenticate('facebook'),
@@ -118,5 +117,4 @@ const routes = function routes(app) {
   );
 };
 
-exports.passport = passport;
-exports.routes = routes;
+export { passport, routes };

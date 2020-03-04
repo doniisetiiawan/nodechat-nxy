@@ -1,18 +1,19 @@
-const express = require('express');
-const cookieParser = require('cookie-parser');
-const session = require('express-session');
+import express from 'express';
+import cookieParser from 'cookie-parser';
+import session from 'express-session';
+import redis from 'redis';
+import bodyParser from 'body-parser';
+import csrf from 'csurf';
+import flash from 'connect-flash';
+import routes from './routes';
+import errorHandlers from './middleware/errorhandlers';
+import log from './middleware/log';
+import util from './middleware/utilities';
+import config from './config';
+import io from './socket.io';
+import { passport, routes as passportRoutes } from './passport';
+
 const RedisStore = require('connect-redis')(session);
-const redis = require('redis');
-const bodyParser = require('body-parser');
-const csrf = require('csurf');
-const flash = require('connect-flash');
-const routes = require('./routes');
-const errorHandlers = require('./middleware/errorhandlers');
-const log = require('./middleware/log');
-const util = require('./middleware/utilities');
-const config = require('./config');
-const io = require('./socket.io');
-const passport = require('./passport');
 
 const redisClient = redis.createClient();
 
@@ -29,8 +30,8 @@ app.use(
     store: new RedisStore({ client: redisClient }),
   }),
 );
-app.use(passport.passport.initialize());
-app.use(passport.passport.session());
+app.use(passport.initialize());
+app.use(passport.session());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(csrf());
@@ -55,7 +56,7 @@ app.get('/error', (req, res, next) => {
   next(new Error('A contrived error'));
 });
 
-passport.routes(app);
+passportRoutes(app);
 
 app.use(errorHandlers.error);
 app.use(errorHandlers.notFound);
