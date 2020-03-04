@@ -28,6 +28,10 @@ const config = {
     randomSize: 256,
     digest: 'sha512',
   },
+  rabbitMQ: {
+    URL: 'amqp://guest:guest@localhost:5672',
+    exchange: 'packtchat.log',
+  },
 };
 
 export default config;

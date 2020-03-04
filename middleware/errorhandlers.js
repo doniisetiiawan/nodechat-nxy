@@ -1,4 +1,6 @@
-exports.notFound = function notFound(req, res) {
+import { error as errorIya } from './log';
+
+const notFound = (req, res) => {
   res
     .status(404)
     .send(
@@ -6,7 +8,9 @@ exports.notFound = function notFound(req, res) {
     );
 };
 
-exports.error = function error(err, req, res, next) {
-  console.log(err);
+const error = ({ message }, req, res, next) => {
+  errorIya({ error: message, ts: Date.now() });
   res.status(500).send('Something broke. What did you do?');
 };
+
+export { notFound, error };

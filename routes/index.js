@@ -1,8 +1,8 @@
-const util = require('../middleware/utilities');
-const config = require('../config');
-const user = require('../passport/user');
+import * as util from '../middleware/utilities';
+import config from '../config';
+import { addUser } from '../passport/user';
 
-function index(req, res) {
+const index = (req, res) => {
   res.cookie('IndexCookie', 'This was set from Index');
   res.send(
     `${JSON.stringify(req.cookies)}===${JSON.stringify(
@@ -11,16 +11,16 @@ function index(req, res) {
       req.signedCookies,
     )}===${JSON.stringify(req.csrfToken())}`,
   );
-}
-function login(req, res) {
+};
+const login = (req, res) => {
   res.send('Login');
-}
-function register(req, res) {
+};
+const register = (req, res) => {
   res.send('Register');
-}
-function registerProcess(req, res) {
+};
+const registerProcess = (req, res) => {
   if (req.body.username && req.body.password) {
-    user.addUser(
+    addUser(
       req.body.username,
       req.body.password,
       config.crypto.workFactor,
@@ -39,18 +39,20 @@ function registerProcess(req, res) {
     req.flash('error', 'Please fill out all the fields');
     res.redirect(config.routes.register);
   }
-}
-function logOut(req, res) {
+};
+const logOut = (req, res) => {
   util.logOut(req);
   res.redirect('/');
-}
-function chat(req, res) {
+};
+const chat = (req, res) => {
   res.send('Chat');
-}
+};
 
-module.exports.index = index;
-module.exports.login = login;
-module.exports.logOut = logOut;
-module.exports.chat = chat;
-module.exports.register = register;
-module.exports.registerProcess = registerProcess;
+export {
+  index,
+  login,
+  logOut,
+  chat,
+  register,
+  registerProcess,
+};

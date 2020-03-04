@@ -5,13 +5,26 @@ import redis from 'redis';
 import bodyParser from 'body-parser';
 import csrf from 'csurf';
 import flash from 'connect-flash';
-import routes from './routes';
-import errorHandlers from './middleware/errorhandlers';
-import log from './middleware/log';
-import util from './middleware/utilities';
+import {
+  index,
+  login,
+  logOut,
+  register,
+  registerProcess,
+  chat,
+} from './routes';
+import {
+  error,
+  notFound,
+} from './middleware/errorhandlers';
+import { logger } from './middleware/log';
+import * as util from './middleware/utilities';
 import config from './config';
-import io from './socket.io';
-import { passport, routes as passportRoutes } from './passport';
+import startIo from './socket.io';
+import {
+  passport,
+  routes as passportRoutes,
+} from './passport';
 
 const RedisStore = require('connect-redis')(session);
 
@@ -19,13 +32,13 @@ const redisClient = redis.createClient();
 
 const app = express();
 
-app.use(log.logger);
+app.use(logger);
 app.use(express.static(`${__dirname}/static`));
 app.use(cookieParser(config.secret));
 app.use(
   session({
     secret: config.secret,
-    saveUninitialized: false,
+    saveUninitialized: true,
     resave: true,
     store: new RedisStore({ client: redisClient }),
   }),
@@ -40,28 +53,22 @@ app.use(util.authenticated);
 app.use(flash());
 app.use(util.templateRoutes);
 
-app.use((req, res, next) => {
-  if (req.session.pageCount) req.session.pageCount += 1;
-  else req.session.pageCount = 1;
-  next();
-});
-
-app.get('/', routes.index);
-app.get(config.routes.login, routes.login);
-app.get(config.routes.logout, routes.logOut);
-app.get(config.routes.register, routes.register);
-app.post(config.routes.register, routes.registerProcess);
-app.get('/chat', [util.requireAuthentication], routes.chat);
+app.get('/', index);
+app.get(config.routes.login, login);
+app.get(config.routes.logout, logOut);
+app.get(config.routes.register, register);
+app.post(config.routes.register, registerProcess);
+app.get('/chat', [util.requireAuthentication], chat);
 app.get('/error', (req, res, next) => {
   next(new Error('A contrived error'));
 });
 
 passportRoutes(app);
 
-app.use(errorHandlers.error);
-app.use(errorHandlers.notFound);
+app.use(error);
+app.use(notFound);
 
 const server = app.listen(config.port, () => console.log(
   `Example app listening on port ${config.port}!`,
 ));
-io.startIo(server);
+startIo(server);

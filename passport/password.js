@@ -1,11 +1,8 @@
-const crypto = require('crypto');
-const scmp = require('scmp');
-const config = require('../config');
+import crypto from 'crypto';
+import scmp from 'scmp';
+import config from '../config';
 
-const passwordCreate = function passwordCreate(
-  password,
-  cb,
-) {
+const passwordCreate = (password, cb) => {
   crypto.randomBytes(
     config.crypto.randomSize,
     (err, salt) => {
@@ -28,13 +25,13 @@ const passwordCreate = function passwordCreate(
   );
 };
 
-const passwordCheck = function passwordCheck(
+const passwordCheck = (
   password,
   derivedPassword,
   salt,
   work,
   cb,
-) {
+) => {
   crypto.pbkdf2(
     password,
     salt,
@@ -51,5 +48,4 @@ const passwordCheck = function passwordCheck(
   );
 };
 
-exports.passwordCreate = passwordCreate;
-exports.passwordCheck = passwordCheck;
+export { passwordCreate, passwordCheck };

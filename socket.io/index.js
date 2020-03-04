@@ -1,21 +1,22 @@
+import cookie from 'cookie';
+import cookieParser from 'cookie-parser';
+import expressSession from 'express-session';
+import redis from 'redis';
+import redisAdapter from 'socket.io-redis';
+import config from '../config';
+
 let io = require('socket.io');
-const cookie = require('cookie');
-const cookieParser = require('cookie-parser');
-const expressSession = require('express-session');
+
 const ConnectRedis = require('connect-redis')(
   expressSession,
 );
-const redis = require('redis');
-const redisAdapter = require('socket.io-redis');
-
-const config = require('../config');
 
 const redisClient = redis.createClient();
 const redisSession = new ConnectRedis({
   client: redisClient,
 });
 
-const socketAuth = function socketAuth(socket, next) {
+const socketAuth = (socket, next) => {
   const handshakeData = socket.request;
   const parsedCookie = cookie.parse(
     handshakeData.headers.cookie,
@@ -27,9 +28,9 @@ const socketAuth = function socketAuth(socket, next) {
 
   if (parsedCookie['connect.sid'] === sid) return next(new Error('Not Authenticated'));
 
-  redisSession.get(sid, (err, session) => {
-    if (session.isAuthenticated) {
-      socket.user = session.user;
+  redisSession.get(sid, (err, { isAuthenticated, user }) => {
+    if (isAuthenticated) {
+      socket.user = user;
       socket.sid = sid;
       return next();
     }
@@ -39,7 +40,7 @@ const socketAuth = function socketAuth(socket, next) {
   return next(new Error('Nothing Defined'));
 };
 
-const socketConnection = function socketConnection(socket) {
+const socketConnection = (socket) => {
   socket.on('GetMe', () => {});
   socket.on('GetUser', (room) => {});
   socket.on('GetChat', (data) => {});
@@ -49,7 +50,7 @@ const socketConnection = function socketConnection(socket) {
   socket.on('disconnect', () => {});
 };
 
-exports.startIo = function startIo(server) {
+const startIo = (server) => {
   io = io.listen(server);
 
   io.adapter(
@@ -65,5 +66,5 @@ exports.startIo = function startIo(server) {
 
   return io;
 };
+export default startIo
 
-exports.io = io;

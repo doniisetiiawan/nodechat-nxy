@@ -1,40 +1,28 @@
-const config = require('../config');
+import config from '../config';
 
-module.exports.csrf = function csrf(req, res, next) {
-  res.locals.token = req.csrfToken();
+const csrf = (req, { locals }, next) => {
+  locals.token = req.csrfToken();
   next();
 };
 
-module.exports.authenticated = function authenticated(
-  req,
-  res,
-  next,
-) {
-  req.session.isAuthenticated = req.session.passport.user !== undefined;
-  res.locals.isAuthenticated = req.session.isAuthenticated;
-  if (req.session.isAuthenticated) {
-    res.locals.user = req.session.passport.user;
+const authenticated = ({ session }, { locals }, next) => {
+  session.isAuthenticated = session.passport.user !== undefined;
+  locals.isAuthenticated = session.isAuthenticated;
+  if (session.isAuthenticated) {
+    locals.user = session.passport.user;
   }
   next();
 };
 
-module.exports.requireAuthentication = function requireAuthentication(
-  req,
-  res,
-  next,
-) {
-  if (req.session.isAuthenticated) {
+const requireAuthentication = ({ session }, res, next) => {
+  if (session.isAuthenticated) {
     next();
   } else {
     res.redirect(config.routes.login);
   }
 };
 
-module.exports.auth = function auth(
-  username,
-  password,
-  session,
-) {
+const auth = (username, password, session) => {
   const isAuth = username === 'joshua' || username === 'brian';
   if (isAuth) {
     session.isAuthenticated = isAuth;
@@ -43,16 +31,16 @@ module.exports.auth = function auth(
   return isAuth;
 };
 
-module.exports.logOut = function logOut(req) {
+const logOut = (req) => {
   req.session.isAuthenticated = false;
   req.logout();
 };
 
-exports.templateRoutes = function templateRoutes(
-  req,
-  res,
-  next,
-) {
-  res.locals.routes = config.routes;
+const templateRoutes = (req, { locals }, next) => {
+  locals.routes = config.routes;
   next();
+};
+
+export {
+  csrf, authenticated, requireAuthentication, logOut, templateRoutes,
 };

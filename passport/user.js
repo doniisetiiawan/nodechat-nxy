@@ -1,4 +1,4 @@
-const passUtil = require('./password');
+import { passwordCreate } from './password';
 
 const Users = {
   josh: {
@@ -33,36 +33,25 @@ const Users = {
   },
 };
 
-const findByUsername = function findByUsername(
-  username,
-  cb,
-) {
+const findByUsername = (username, cb) => {
   cb(null, Users[username]);
 };
 
-const addUser = function addUser(
-  username,
-  password,
-  work,
-  cb,
-) {
+const addUser = (username, password, work, cb) => {
   if (Users[username] === undefined) {
-    passUtil.passwordCreate(
-      password,
-      (err, salt, password) => {
-        Users[username] = {
-          salt,
-          password,
-          work,
-          displayName: username,
-          id: username,
-          provider: 'local',
-          username,
-        };
+    passwordCreate(password, (err, salt, password) => {
+      Users[username] = {
+        salt,
+        password,
+        work,
+        displayName: username,
+        id: username,
+        provider: 'local',
+        username,
+      };
 
-        return cb(null, Users[username]);
-      },
-    );
+      return cb(null, Users[username]);
+    });
   } else {
     return cb(
       { errorCode: 1, message: 'User exists!' },
@@ -72,16 +61,11 @@ const addUser = function addUser(
 };
 
 const updatePassword = (username, password, work) => {
-  passUtil.passwordCreate(
-    password,
-    (err, salt, password) => {
-      Users[username].salt = salt;
-      Users[username].password = password;
-      Users[username].work = work;
-    },
-  );
+  passwordCreate(password, (err, salt, password) => {
+    Users[username].salt = salt;
+    Users[username].password = password;
+    Users[username].work = work;
+  });
 };
 
-exports.findByUsername = findByUsername;
-exports.addUser = addUser;
-exports.updatePassword = updatePassword;
+export { findByUsername, addUser, updatePassword };

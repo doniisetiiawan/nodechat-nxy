@@ -2,9 +2,10 @@ import passport from 'passport';
 import { Strategy as Facebook } from 'passport-facebook';
 import { OAuth2Strategy as GoogleStrategy } from 'passport-google-oauth';
 import { Strategy as LocalStrategy } from 'passport-local';
-import passwordUtils from './password';
-import user from './user';
+import { passwordCheck } from './password';
+import { findByUsername, updatePassword } from './user';
 import config from '../config';
+import { debug } from '../middleware/log';
 
 passport.use(
   new Facebook(
@@ -36,9 +37,9 @@ passport.use(
 
 passport.use(
   new LocalStrategy((username, password, done) => {
-    user.findByUsername(username, (err, profile) => {
+    findByUsername(username, (err, profile) => {
       if (profile) {
-        passwordUtils.passwordCheck(
+        passwordCheck(
           password,
           profile.password,
           profile.salt,
@@ -46,7 +47,7 @@ passport.use(
           (err, isAuth) => {
             if (isAuth) {
               if (profile.work < config.crypto.workFactor) {
-                user.updatePassword(
+                updatePassword(
                   username,
                   password,
                   config.crypto.workFactor,
@@ -54,6 +55,10 @@ passport.use(
               }
               done(null, profile);
             } else {
+              debug({
+                message: 'Wrong Username or Password',
+                username,
+              });
               done(null, false, {
                 message: 'Wrong Username or Password',
               });
