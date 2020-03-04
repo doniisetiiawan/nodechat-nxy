@@ -5,11 +5,10 @@ const csrf = (req, { locals }, next) => {
   next();
 };
 
-const authenticated = ({ session }, { locals }, next) => {
-  session.isAuthenticated = session.passport.user !== undefined;
-  locals.isAuthenticated = session.isAuthenticated;
-  if (session.isAuthenticated) {
-    locals.user = session.passport.user;
+const authenticated = (req, {locals}, next) => {
+  locals.isAuthenticated = req.isAuthenticated();
+  if (req.isAuthenticated()) {
+    locals.user = req.user;
   }
   next();
 };
