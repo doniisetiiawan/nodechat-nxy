@@ -5,7 +5,7 @@ const csrf = (req, { locals }, next) => {
   next();
 };
 
-const authenticated = (req, {locals}, next) => {
+const authenticated = (req, { locals }, next) => {
   locals.isAuthenticated = req.isAuthenticated();
   if (req.isAuthenticated()) {
     locals.user = req.user;
@@ -19,15 +19,6 @@ const requireAuthentication = ({ session }, res, next) => {
   } else {
     res.redirect(config.routes.login);
   }
-};
-
-const auth = (username, password, session) => {
-  const isAuth = username === 'joshua' || username === 'brian';
-  if (isAuth) {
-    session.isAuthenticated = isAuth;
-    session.user = { username };
-  }
-  return isAuth;
 };
 
 const logOut = (req) => {
