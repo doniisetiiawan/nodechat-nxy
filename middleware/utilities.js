@@ -1,20 +1,21 @@
 import config from '../config';
 
-const csrf = (req, { locals }, next) => {
-  locals.token = req.csrfToken();
+const csrf = (req, res, next) => {
+  res.locals.token = req.csrfToken();
   next();
 };
 
-const authenticated = (req, { locals }, next) => {
-  locals.isAuthenticated = req.isAuthenticated();
-  if (req.isAuthenticated()) {
-    locals.user = req.user;
+const authenticated = (req, res, next) => {
+  req.session.isAuthenticated = req.user !== undefined;
+  res.locals.isAuthenticated = req.session.isAuthenticated;
+  if (req.session.isAuthenticated) {
+    res.locals.user = req.user;
   }
   next();
 };
 
-const requireAuthentication = ({ session }, res, next) => {
-  if (session.isAuthenticated) {
+const requireAuthentication = (req, res, next) => {
+  if (req.session.isAuthenticated) {
     next();
   } else {
     res.redirect(config.routes.login);
@@ -26,11 +27,16 @@ const logOut = (req) => {
   req.logout();
 };
 
-const templateRoutes = (req, { locals }, next) => {
-  locals.routes = config.routes;
+const templateRoutes = (req, res, next) => {
+  res.locals.routes = config.routes;
+
   next();
 };
 
 export {
-  csrf, authenticated, requireAuthentication, logOut, templateRoutes,
+  csrf,
+  authenticated,
+  requireAuthentication,
+  logOut,
+  templateRoutes,
 };

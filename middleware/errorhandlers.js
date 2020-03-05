@@ -8,9 +8,10 @@ const notFound = (req, res) => {
     );
 };
 
-const error = ({ message }, req, res, next) => {
-  errorIya({ error: message, ts: Date.now() });
-  res.status(500).send('Something broke. What did you do?');
+const error = (err, req, res, next) => {
+  errorIya({ error: err.message, ts: Date.now() });
+  res.status(500).render('500', { title: 'Mistakes Were Made' });
+  next();
 };
 
 export { notFound, error };

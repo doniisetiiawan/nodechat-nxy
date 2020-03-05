@@ -12,8 +12,8 @@ const error = (message) => {
   });
 };
 
-const logger = ({ url }, res, next) => {
-  debug({ url, ts: Date.now() });
+const logger = (req, res, next) => {
+  debug({ url: req.url, ts: Date.now() });
   next();
 };
 

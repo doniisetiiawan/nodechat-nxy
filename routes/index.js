@@ -9,7 +9,9 @@ const index = (req, res) => {
       req.session,
     )}===${JSON.stringify(
       req.signedCookies,
-    )}===${JSON.stringify(req.csrfToken())}`,
+    )}===${JSON.stringify(
+      req.csrfToken(),
+    )}===${JSON.stringify(req.user)}`,
   );
 };
 const login = (req, res) => {

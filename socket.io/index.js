@@ -28,9 +28,9 @@ const socketAuth = (socket, next) => {
 
   if (parsedCookie['connect.sid'] === sid) return next(new Error('Not Authenticated'));
 
-  redisSession.get(sid, (err, { isAuthenticated, user }) => {
-    if (isAuthenticated) {
-      socket.user = user;
+  redisSession.get(sid, (err, session) => {
+    if (session.isAuthenticated) {
+      socket.user = session.user;
       socket.sid = sid;
       return next();
     }
@@ -66,5 +66,4 @@ const startIo = (server) => {
 
   return io;
 };
-export default startIo
-
+export default startIo;
