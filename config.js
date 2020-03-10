@@ -1,26 +1,26 @@
 const config = {
-  port: 3000,
-  secret: 'Continually',
-  redisPort: 6379,
-  redisHost: 'localhost',
+  port: process.env.PORT,
+  secret: process.env.SECRET,
+  redisPort: process.env.REDIS_PORT,
+  redisHost: process.env.REDIS_HOST,
   routes: {
     login: '/account/login',
     logout: '/account/logout',
-    register: '/account/register',
     chat: '/chat',
+    register: '/account/register',
     facebookAuth: '/auth/facebook',
     facebookAuthCallback: '/auth/facebook/callback',
     googleAuth: '/auth/google',
     googleAuthCallback: '/auth/google/callback',
   },
-  host: 'http://localhost:3000',
+  host: process.env.HOST,
   facebook: {
-    appID: 'YOUR_ID',
-    appSecret: 'YOUR_SECRET',
+    appID: process.env.FACEBOOK_APPID,
+    appSecret: process.env.FACEBOOK_APPSECRET,
   },
   google: {
-    clientID: 'YOUR_ID',
-    clientSecret: 'YOUR_SECRET',
+    clientID: process.env.GOOGLE_APPID,
+    clientSecret: process.env.GOOGLE_APPSECRET,
   },
   crypto: {
     workFactor: 5000,
@@ -29,8 +29,8 @@ const config = {
     digest: 'sha512',
   },
   rabbitMQ: {
-    URL: 'amqp://guest:guest@localhost:5672',
-    exchange: 'packtchat.log',
+    URL: process.env.RABBITMQ_URL,
+    exchange: process.env.RABBITMQ_EXCHANGE,
   },
 };
 

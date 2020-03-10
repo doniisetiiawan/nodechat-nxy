@@ -26,6 +26,7 @@
     "cookie": "latest",
     "cookie-parser": "^1.4.4",
     "csurf": "^1.11.0",
+    "dotenv": "^8.2.0",
     "express": "^4.17.1",
     "express-session": "^1.17.0",
     "passport": "^0.4.1",
