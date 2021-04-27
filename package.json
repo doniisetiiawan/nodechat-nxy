@@ -34,7 +34,7 @@
     "passport-google-oauth": "^2.0.0",
     "passport-local": "^1.0.0",
     "q": "^1.5.1",
-    "redis": "^3.0.2",
+    "redis": "^3.1.1",
     "scmp": "^2.1.0",
     "socket.io": "^2.3.0",
     "socket.io-redis": "^5.2.0"
